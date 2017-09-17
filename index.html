@@ -239,6 +239,28 @@
             res36.innerHTML = `${res36.innerHTML}<span>${v}</span>`
         });
 
+        const observable7 = Rx.Observable.create(observer => {
+            observer.next('foo')
+            setTimeout(() => {
+                observer.next('bar')
+				observer.complete();
+			}, 1000)
+            setTimeout(() => observer.next('fooAgain'), 2000)
+		})
+
+        observable7
+			.subscribe(v => console.log(v))
+
+        const observable8 = new Rx.Subject
+
+        observable8
+        	.subscribe(v => console.log(v))
+
+        observable8.next('foo1')
+        observable8.next('bar1')
+        observable8.complete()
+        observable8.next('foo1Again');
+
 	</script>
 </body>
 </html>

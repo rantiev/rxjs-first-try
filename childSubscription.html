@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="node_modules/rxjs/bundles/Rx.js"></script>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		body {
+			font-family: Arial;
+			font-size: 11px;
+		}
+
+		h2	{
+			margin: 20px 20px 0;
+		}
+
+		#main {
+			margin: 20px;
+			display: flex;
+			flex-direction: row;
+		}
+
+		.square {
+			width: 100px;
+			height: 100px;
+			margin: 0 20px 20px;
+			background: sienna;
+		}
+
+		.res {
+			width: 300px;
+			padding: 4px;
+			margin: 6px 20px;
+			background: cadetblue;
+			border: 1px solid dodgerblue;
+		}
+
+		.res span {
+			display: inline-block;
+			background: palevioletred;
+			border: darkred;
+			padding: 2px;
+			margin: 2px;
+		}
+
+		.res span:first-child {
+			background: blueviolet;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<div class="col">
+			<div class="square square1"></div>
+			<div class="square square2"></div>
+			<button class="btn">Unsubscribe 3</button>
+			<div class="res res1"><span>First</span></div>
+			<div class="res res2"><span>Second</span></div>
+		</div>
+	</div>
+
+	<script>
+		const dqs = document.querySelector.bind(document);
+
+		const square1 = dqs('.square1')
+		const square2 = dqs('.square2')
+		const res1 = dqs('.res1')
+		const res2 = dqs('.res2')
+		const btn = dqs('.btn')
+
+        const observable1 = Rx.Observable.fromEvent(square1, 'click')
+        const observable2 = Rx.Observable.fromEvent(square2, 'click')
+
+        const subscription1 = observable1
+			.subscribe(v => {
+            	res1.innerHTML = `${res1.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+        const subscription2  = observable2
+			.subscribe(v => {
+				res2.innerHTML = `${res2.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+        const subscription3  = observable2
+			.subscribe(v => {
+				res2.innerHTML = `${res2.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+		subscription1.add(subscription2);
+		subscription1.add(subscription3);
+
+		btn.addEventListener('click', () => {
+            subscription1.unsubscribe();
+		});
+
+	</script>
+</body>
+</html>
