@@ -56,12 +56,18 @@
 </head>
 <body>
 	<div id="main">
+		<div class="square square1"></div>
+		<div class="square square2"></div>
+
 		<div class="col">
-			<div class="square square1"></div>
-			<div class="square square2"></div>
-			<button class="btn">Unsubscribe 3</button>
+			<button class="btn btn1">Unsubscribe 3</button>
 			<div class="res res1"><span>First</span></div>
 			<div class="res res2"><span>Second</span></div>
+		</div>
+		<div class="col">
+			<button class="btn btn2">Unsubscribe first</button>
+			<div class="res res3"><span>Third</span></div>
+			<div class="res res4"><span>Fourth</span></div>
 		</div>
 	</div>
 
@@ -72,7 +78,11 @@
 		const square2 = dqs('.square2')
 		const res1 = dqs('.res1')
 		const res2 = dqs('.res2')
-		const btn = dqs('.btn')
+        const res3 = dqs('.res3')
+        const res4 = dqs('.res4')
+
+		const btn1 = dqs('.btn1')
+		const btn2 = dqs('.btn2')
 
         const observable1 = Rx.Observable.fromEvent(square1, 'click')
         const observable2 = Rx.Observable.fromEvent(square2, 'click')
@@ -95,9 +105,24 @@
 		subscription1.add(subscription2);
 		subscription1.add(subscription3);
 
-		btn.addEventListener('click', () => {
+		btn1.addEventListener('click', () => {
             subscription1.unsubscribe();
 		});
+
+        const observable3 = Rx.Observable.fromEvent(square1, 'click')
+			const subscription4  = observable3
+			.subscribe(v => {
+				res3.innerHTML = `${res3.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+        const subscription5  = observable3
+			.subscribe(v => {
+				res4.innerHTML = `${res4.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+        btn2.addEventListener('click', () => {
+            subscription4.unsubscribe();
+        });
 
 	</script>
 </body>
