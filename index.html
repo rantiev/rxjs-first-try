@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="node_modules/rxjs/bundles/Rx.js"></script>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		body {
+			font-family: Arial;
+			font-size: 11px;
+		}
+
+		h2	{
+			margin: 20px 20px 0;
+		}
+
+		#main {
+			margin: 20px;
+			display: flex;
+			flex-direction: row;
+		}
+
+		.col-1-2 {
+
+		}
+
+		.square {
+			width: 100px;
+			height: 100px;
+			margin: 0 20px 20px;
+			background: sienna;
+		}
+
+		.res {
+			width: 300px;
+			padding: 4px;
+			margin: 6px 20px;
+			background: cadetblue;
+			border: 1px solid dodgerblue;
+		}
+
+		.res span {
+			display: inline-block;
+			background: palevioletred;
+			border: darkred;
+			padding: 2px;
+			margin: 2px;
+		}
+
+		.res span:first-child {
+			background: blueviolet;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="main">
+		<div class="col-1-2">
+
+			<h2>Flow control operators:</h2>
+			<div class="square square1"></div>
+
+			<div class="res res11">
+				<span>.filter(e => e.clientX <= 70 && e.clientY <= 70 ):</span>
+			</div>
+			<div class="res res12">
+				<span>.delay(500):</span>
+			</div>
+			<div class="res res13">
+				<span>.debounceTime(500):</span>
+			</div>
+			<div class="res res14">
+				<span>.take(3):</span>
+			</div>
+
+			<div class="res res15">
+				<span>.takeUntil(observable2):</span>
+			</div>
+
+			<div class="res res16">
+				<span>.distinct():</span>
+			</div>
+
+			<div class="res res17">
+				<span>.distinctUntilChanged((e1, e2) => e1.clientX === e2.clientX):</span>
+			</div>
+
+		</div>
+		<div class="col-1-2">
+			<h2>Flow control operators:</h2>
+			<div class="square square2"></div>
+		</div>
+	</div>
+
+	<script>
+		const square1 = document.querySelector('.square1')
+        const square2 = document.querySelector('.square2')
+
+		const res11 = document.querySelector('.res11')
+		const res12 = document.querySelector('.res12')
+		const res13 = document.querySelector('.res13')
+		const res14 = document.querySelector('.res14')
+		const res15 = document.querySelector('.res15')
+		const res16 = document.querySelector('.res16')
+		const res17 = document.querySelector('.res17')
+
+        const observable1 = Rx.Observable.fromEvent(square1, 'click')
+        const observable2 = Rx.Observable.fromEvent(square2, 'click')
+
+        observable1
+		    .filter(e => e.clientX <= 70 && e.clientY <= 70 )
+			.subscribe(v => {
+            	res11.innerHTML = `${res11.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			})
+
+        observable1
+			.delay(500)
+			.subscribe(v => {
+				res12.innerHTML = `${res12.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			});
+
+        observable1
+			.debounceTime(500)
+			.subscribe(v => {
+				res13.innerHTML = `${res13.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			});
+
+        observable1
+			.take(3)
+			.subscribe(v => {
+				res14.innerHTML = `${res14.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			});
+
+        observable1
+			.takeUntil(observable2)
+			.subscribe(v => {
+				res15.innerHTML = `${res15.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			});
+
+        observable1
+			.map(e => `{${e.clientX}, ${e.clientY}}`)
+			.distinct()
+			.subscribe(v => {
+				res16.innerHTML = `${res16.innerHTML}<span>${v}</span>`
+			});
+
+        observable1
+			.distinctUntilChanged((e1, e2) => e1.clientX === e2.clientX)
+			.subscribe(v => {
+            	res17.innerHTML = `${res17.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
+			});
+	</script>
+</body>
+</html>
