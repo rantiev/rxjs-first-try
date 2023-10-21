@@ -1,3 +1,16 @@
+const res01 = document.querySelector('.res01')
+const res02 = document.querySelector('.res02')
+const res03 = document.querySelector('.res03')
+const res04 = document.querySelector('.res04')
+const res05 = document.querySelector('.res05')
+const res06 = document.querySelector('.res06')
+
+const res001 = document.querySelector('.res001')
+const res002 = document.querySelector('.res002')
+const res003 = document.querySelector('.res003')
+const res004 = document.querySelector('.res004')
+const res005 = document.querySelector('.res005')
+
 const square1 = document.querySelector('.square1')
 const square2 = document.querySelector('.square2')
 
@@ -19,8 +32,115 @@ const res36 = document.querySelector('.res36')
 
 const observable1 = rxjs.fromEvent(square1, 'click')
 const observable2 = rxjs.fromEvent(square2, 'click')
+const interval1 = rxjs.interval(500).pipe(rxjs.take(10))
+const interval2 = rxjs.interval(500)
 
-observable1.pipe(rxjs.filter(e => e.clientX <= 70 && e.clientY <= 70 )).subscribe(v => {
+interval1.pipe(rxjs.map((e, i) => e + 'ex1' )).subscribe({
+  next: v => {
+    res01.innerHTML = `${res01.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res01.innerHTML = `${res01.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.switchMap((e, i) => rxjs.of(e + 'ex2', e + '*ex2', e + '**ex2')
+  .pipe(rxjs.delay((10 - i) * 1000)))).subscribe({
+    next: v => {
+      res02.innerHTML = `${res02.innerHTML}<span>${v}</span>`
+    },
+    error: e => console.error,
+    complete: () => {
+      res02.innerHTML = `${res02.innerHTML} - completed`
+    }
+})
+
+interval1.pipe(rxjs.concatMap((e, i) => rxjs.of(e + 'ex3', e + '*ex3', e + '**ex3')
+  .pipe(rxjs.delay((10 - i) * 1000)))).subscribe({
+  next: v => {
+    res03.innerHTML = `${res03.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res03.innerHTML = `${res03.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.mergeMap((e, i) => rxjs.of(e + 'ex4', e + '*ex4', e + '**ex4')
+  .pipe(rxjs.delay((10 - i) * 1000)))).subscribe({
+  next: v => {
+    res04.innerHTML = `${res04.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res04.innerHTML = `${res04.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.exhaustMap((e, i) => rxjs.of(e + 'ex5', e + '*ex5', e + '**ex5')
+  .pipe(rxjs.delay((10 - i) * 1000)))).subscribe({
+  next: v => {
+    res05.innerHTML = `${res05.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res05.innerHTML = `${res05.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.map((e, i) => rxjs.of(e + 'ex1').pipe(rxjs.delay((10-i)*1000))), rxjs.switchAll()).subscribe({
+  next: v => {
+    res001.innerHTML = `${res001.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res001.innerHTML = `${res001.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.map((e, i) => rxjs.of(e + 'ex2').pipe(rxjs.delay((10-i)*1000))), rxjs.mergeAll()).subscribe({
+  next: v => {
+    res002.innerHTML = `${res002.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res002.innerHTML = `${res002.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.map((e, i) => rxjs.of(e + 'ex3').pipe(rxjs.delay((10-i)*1000))), rxjs.concatAll()).subscribe({
+  next: v => {
+    res003.innerHTML = `${res003.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res003.innerHTML = `${res003.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.map((e, i) => rxjs.of(e + 'ex4').pipe(rxjs.delay((10-i)*1000))), rxjs.exhaustAll()).subscribe({
+  next: v => {
+    res004.innerHTML = `${res004.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res004.innerHTML = `${res004.innerHTML} - completed`
+  }
+})
+
+interval1.pipe(rxjs.map((e, i) => rxjs.of(e + 'ex5').pipe(rxjs.delay((10-i)*1000))), rxjs.combineLatestAll()).subscribe({
+  next: v => {
+    res005.innerHTML = `${res005.innerHTML}<span>${v}</span>`
+  },
+  error: e => console.error,
+  complete: () => {
+    res005.innerHTML = `${res005.innerHTML} - completed`
+  }
+})
+
+
+observable1.pipe(rxjs.filter(e => e.clientX <= 150 && e.clientY <= 150 )).subscribe(v => {
   res11.innerHTML = `${res11.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
 })
 
@@ -40,8 +160,8 @@ observable1.pipe(rxjs.takeUntil(observable2)).subscribe(v => {
   res15.innerHTML = `${res15.innerHTML}<span>{${v.clientX}, ${v.clientY}}</span>`
 })
 
-observable1.pipe(rxjs.map(e => `{${e.clientX}, ${e.clientY}}`), rxjs.distinct(observable2)).subscribe(v => {
-  res16.innerHTML = `${res16.innerHTML}<span>${v}</span>`
+observable1.pipe(rxjs.distinct(e => e.clientX)).subscribe(v => {
+  res16.innerHTML = `${res16.innerHTML}<span>${v.clientX}</span>`
 })
 
 observable1.pipe(rxjs.distinctUntilChanged((e1, e2) => e1.clientX === e2.clientX)).subscribe(v => {

@@ -11,7 +11,7 @@
 
 		body {
 			font-family: Arial;
-			font-size: 11px;
+			font-size: 14px;
 		}
 
 		h2	{
@@ -48,7 +48,7 @@
 		}
 
 		.res span:first-child {
-			background: blueviolet;
+			background: lightseagreen;
 			display: block;
 		}
 	</style>
@@ -56,6 +56,52 @@
 <body>
 	<div id="main">
 		<div class="col">
+
+			<h2>Transform operators:</h2>
+			<div class="res res01">
+				<span>interval(1,2,3).pipe(take(10)).pipe(map(e => e + 'x1')):</span>
+			</div>
+
+			<div class="res res02">
+				<span>interval(1,2,3).pipe(take(10)).pipe(switchMap((e, i) => of(e +
+				'ex2', e + '*ex2', e + '**ex2')).pipe(delay((10 - i) * 1000))):</span>
+			</div>
+
+			<div class="res res03">
+				<span>interval(1,2,3).pipe(take(10)).pipe(concatMap((e, i) => of(e +
+				'ex2', e + '*ex2', e + '**ex2')).pipe(delay((10 - i) * 1000))):</span>
+			</div>
+
+			<div class="res res04">
+				<span>interval(1,2,3).pipe(take(10)).pipe(mergeMap((e, i) => of(e +
+				'ex2', e + '*ex2', e + '**ex2')).pipe(delay((10 - i) * 1000))):</span>
+			</div>
+
+			<div class="res res05">
+				<span>interval(1,2,3).pipe(take(10)).pipe(exhaustMap((e, i) => of(e +
+				'ex2', e + '*ex2', e + '**ex2')).pipe(delay((10 - i) * 1000))):</span>
+			</div>
+
+			<h2>Join operators:</h2>
+			<div class="res res001">
+				<span>map((e, i) => of(e + 'ex1').pipe(delay((10-i)*1000))), switchAll():</span>
+			</div>
+
+			<div class="res res002">
+				<span>map((e, i) => of(e + 'ex2').pipe(delay((10-i)*1000))), mergeAll():</span>
+			</div>
+
+			<div class="res res003">
+				<span>map((e, i) => of(e + 'ex3').pipe(delay((10-i)*1000))), concatAll():</span>
+			</div>
+
+			<div class="res res004">
+				<span>map((e, i) => of(e + 'ex4').pipe(delay((10-i)*1000))), exhaustAll():</span>
+			</div>
+
+			<div class="res res005">
+				<span>map((e, i) => of(e + 'ex4').pipe(delay((10-i)*1000))), combineLatestAll():</span>
+			</div>
 
 			<h2>Flow control operators:</h2>
 			<div class="square square1"></div>
@@ -78,7 +124,7 @@
 			</div>
 
 			<div class="res res16">
-				<span>.distinct():</span>
+				<span>.distinct(e => e.clientX)</span>
 			</div>
 
 			<div class="res res17">
