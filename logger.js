@@ -17,8 +17,9 @@ export const logger = winston.createLogger({
 })
 
 winston.addColors({
-  error: 'bold italic red cyanBG',
+  error: 'bold italic red blueBG',
   info: 'bold blue magentaBG',
+  warn: 'bold green blueBG',
 })
 
 //
