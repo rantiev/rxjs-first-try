@@ -18,6 +18,7 @@ import {
   timer,
   throwError,
   timeout,
+  retry,
 } from 'rxjs'
 import { delayEach } from './delayEach.js'
 import { logger } from './logger.js'
@@ -40,18 +41,23 @@ const o3$ = of(
   '-------'
 ).pipe(delayEach(300))
 
-export function combineLatestWithValues(observables, maxWaitingTime = 1000) {
+export function combineLatestWithValues(
+  observables,
+  maxWaitingTime = 1000,
+  maxRetries = 0
+) {
   return combineLatest(
     observables.map((o) => o.pipe(filter((v) => !(v == null))))
   ).pipe(
     timeout({
-      first: maxWaitingTime,
+      each: maxWaitingTime,
       with: () => throwError(() => new Error('Component data resolve timeout')),
-    })
+    }),
+    retry(maxRetries)
   )
 }
 
-combineLatestWithValues([o1$, o2$, o3$], 999).subscribe({
+combineLatestWithValues([o1$, o2$, o3$], 900).subscribe({
   next: (v) => {
     logger.info(v)
   },
